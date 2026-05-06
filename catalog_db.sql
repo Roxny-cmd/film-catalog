@@ -1,40 +1,40 @@
-CREATE TABLE directors IF NOT EXISTS
+CREATE TABLE IF NOT EXISTS directors 
 (
 	director_id serial PRIMARY KEY,
 	director_name varchar(256) UNIQUE NOT NULL
 );
 
-CREATE TABLE studios IF NOT EXISTS
+CREATE TABLE IF NOT EXISTS studios 
 (
 	studio_id serial PRIMARY KEY,
 	studio_name varchar(256) UNIQUE NOT NULL
 );
 
-CREATE TABLE genres IF NOT EXISTS
+CREATE TABLE IF NOT EXISTS genres 
 (
 	genre_id serial PRIMARY KEY,
 	genre_name varchar(256) UNIQUE NOT NULL
 );
 
-CREATE TABLE actors IF NOT EXISTS
+CREATE TABLE IF NOT EXISTS actors
 (
 	actor_id serial PRIMARY KEY,
 	actor_name varchar(256) UNIQUE NOT NULL
 );
 
-CREATE TABLE countries IF NOT EXISTS
+CREATE TABLE IF NOT EXISTS countries
 (
 	country_id serial PRIMARY KEY,
 	country_name varchar(256) UNIQUE NOT NULL
 );
 
-CREATE TABLE platforms IF NOT EXISTS
+CREATE TABLE IF NOT EXISTS platforms 
 (
 	platform_id serial PRIMARY KEY,
 	platform_name varchar(256) UNIQUE NOT NULL
 );
 
-CREATE TABLE projects IF NOT EXISTS
+CREATE TABLE IF NOT EXISTS projects 
 (
 	project_id serial PRIMARY KEY,
 	title varchar(256) UNIQUE NOT NULL,
@@ -51,7 +51,7 @@ CREATE TABLE projects IF NOT EXISTS
 	FOREIGN KEY (country_id) REFERENCES countries(country_id)
 );
 
-CREATE TABLE project_genre IF NOT EXISTS
+CREATE TABLE IF NOT EXISTS project_genre 
 (
 	project_id int,
 	genre_id int,
@@ -62,7 +62,7 @@ CREATE TABLE project_genre IF NOT EXISTS
     FOREIGN KEY (genre_id) REFERENCES genres(genre_id)
 );
 
-CREATE TABLE project_cast IF NOT EXISTS
+CREATE TABLE IF NOT EXISTS project_cast 
 (
 	project_id int,
 	actor_id int,
@@ -74,7 +74,7 @@ CREATE TABLE project_cast IF NOT EXISTS
     FOREIGN KEY (actor_id) REFERENCES actors(actor_id)
 );
 
-CREATE TABLE project_on_platform IF NOT EXISTS
+CREATE TABLE IF NOT EXISTS project_on_platform
 (
 	project_id int,
 	platform_id int,
