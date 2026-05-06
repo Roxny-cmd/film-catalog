@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS projects
 	title varchar(256) UNIQUE NOT NULL,
 	type varchar(256) CHECK (type IN('serial','movie')) NOT NULL,
 	date_of_release date NOT NULL,
-	rating decimal (3,1) CHECK (0, 10),
+	rating decimal (3,1) CHECK (rating >= 0 and rating <= 10),
 	description text,
 	director_id int,
 	studio_id int,
