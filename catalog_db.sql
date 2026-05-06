@@ -1,46 +1,46 @@
 CREATE TABLE IF NOT EXISTS directors 
 (
-	director_id serial PRIMARY KEY,
-	director_name varchar(256) UNIQUE NOT NULL
+	id serial PRIMARY KEY,
+	name varchar(256) UNIQUE NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS studios 
 (
-	studio_id serial PRIMARY KEY,
-	studio_name varchar(256) UNIQUE NOT NULL
+	id serial PRIMARY KEY,
+	name varchar(256) UNIQUE NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS genres 
 (
-	genre_id serial PRIMARY KEY,
-	genre_name varchar(256) UNIQUE NOT NULL
+	id serial PRIMARY KEY,
+	name varchar(256) UNIQUE NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS actors
 (
-	actor_id serial PRIMARY KEY,
-	actor_name varchar(256) UNIQUE NOT NULL
+	id serial PRIMARY KEY,
+	name varchar(256) UNIQUE NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS countries
 (
-	country_id serial PRIMARY KEY,
-	country_name varchar(256) UNIQUE NOT NULL
+	id serial PRIMARY KEY,
+	name varchar(256) UNIQUE NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS platforms 
 (
-	platform_id serial PRIMARY KEY,
-	platform_name varchar(256) UNIQUE NOT NULL
+	id serial PRIMARY KEY,
+	name varchar(256) UNIQUE NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS projects 
 (
-	project_id serial PRIMARY KEY,
+	id serial PRIMARY KEY,
 	title varchar(256) UNIQUE NOT NULL,
 	type varchar(256) CHECK (type IN('serial','movie')) NOT NULL,
 	date_of_release date NOT NULL,
-	rating decimal (2,1) CHECK (rating >= 0 and rating <= 10),
+	rating decimal (3,1) CHECK (rating >= 0 and rating <= 10),
 	description text,
 	director_id int,
 	studio_id int,
