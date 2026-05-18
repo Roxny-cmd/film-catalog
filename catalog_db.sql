@@ -46,9 +46,9 @@ CREATE TABLE IF NOT EXISTS projects
 	studio_id int,
 	country_id int,
 
-	FOREIGN KEY (director_id) REFERENCES directors(director_id),
-	FOREIGN KEY (studio_id) REFERENCES studios(studio_id),
-	FOREIGN KEY (country_id) REFERENCES countries(country_id)
+	FOREIGN KEY (director_id) REFERENCES directors(id),
+	FOREIGN KEY (studio_id) REFERENCES studios(id),
+	FOREIGN KEY (country_id) REFERENCES countries(id)
 );
 
 CREATE TABLE IF NOT EXISTS project_genre 
@@ -58,8 +58,8 @@ CREATE TABLE IF NOT EXISTS project_genre
 	
 	PRIMARY KEY(project_id,genre_id),
 
-	FOREIGN KEY (project_id) REFERENCES projects(project_id) ON DELETE CASCADE,
-    FOREIGN KEY (genre_id) REFERENCES genres(genre_id)
+	FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE,
+    FOREIGN KEY (genre_id) REFERENCES genres(id)
 );
 
 CREATE TABLE IF NOT EXISTS project_cast 
@@ -70,8 +70,8 @@ CREATE TABLE IF NOT EXISTS project_cast
 
 	PRIMARY KEY(project_id, actor_id),
 
-	FOREIGN KEY (project_id) REFERENCES projects(project_id) ON DELETE CASCADE,
-    FOREIGN KEY (actor_id) REFERENCES actors(actor_id)
+	FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE,
+    FOREIGN KEY (actor_id) REFERENCES actors(id)
 );
 
 CREATE TABLE IF NOT EXISTS project_on_platform
@@ -81,6 +81,6 @@ CREATE TABLE IF NOT EXISTS project_on_platform
 
 	PRIMARY KEY(project_id, platform_id),
 
-	FOREIGN KEY (project_id) REFERENCES projects(project_id) ON DELETE CASCADE,
-    FOREIGN KEY (platform_id) REFERENCES platforms(platform_id)
+	FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE,
+    FOREIGN KEY (platform_id) REFERENCES platforms(id)
 )
