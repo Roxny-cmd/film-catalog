@@ -1,42 +1,42 @@
 CREATE TABLE directors
 (
-	director_id serial PRIMARY KEY,
-	director_name varchar(256) UNIQUE NOT NULL
+	id serial PRIMARY KEY,
+	name varchar(256) UNIQUE NOT NULL
 );
 
 CREATE TABLE studios
 (
-	studio_id serial PRIMARY KEY,
-	studio_name varchar(256) UNIQUE NOT NULL
+	id serial PRIMARY KEY,
+	name varchar(256) UNIQUE NOT NULL
 );
 
 CREATE TABLE genres
 (
-	genre_id serial PRIMARY KEY,
-	genre_name varchar(256) UNIQUE NOT NULL
+	id serial PRIMARY KEY,
+	name varchar(256) UNIQUE NOT NULL
 );
 
 CREATE TABLE actors
 (
-	actor_id serial PRIMARY KEY,
-	actor_name varchar(256) UNIQUE NOT NULL
+	id serial PRIMARY KEY,
+	name varchar(256) UNIQUE NOT NULL
 );
 
 CREATE TABLE countries
 (
-	country_id serial PRIMARY KEY,
-	country_name varchar(256) UNIQUE NOT NULL
+	id serial PRIMARY KEY,
+	name varchar(256) UNIQUE NOT NULL
 );
 
 CREATE TABLE platforms
 (
-	platform_id serial PRIMARY KEY,
-	platform_name varchar(256) UNIQUE NOT NULL
+	id serial PRIMARY KEY,
+	name varchar(256) UNIQUE NOT NULL
 );
 
 CREATE TABLE projects
 (
-	project_id serial PRIMARY KEY,
+	id serial PRIMARY KEY,
 	title varchar(256) UNIQUE NOT NULL,
 	type varchar(256) CHECK (type IN('serial','movie')) NOT NULL,
 	date_of_release date NOT NULL,
@@ -46,9 +46,9 @@ CREATE TABLE projects
 	studio_id int,
 	country_id int,
 
-	FOREIGN KEY (director_id) REFERENCES directors(director_id),
-	FOREIGN KEY (studio_id) REFERENCES studios(studio_id),
-	FOREIGN KEY (country_id) REFERENCES countries(country_id)
+	FOREIGN KEY (director_id) REFERENCES directors(did),
+	FOREIGN KEY (studio_id) REFERENCES studios(id),
+	FOREIGN KEY (country_id) REFERENCES countries(id)
 );
 
 CREATE TABLE project_genre
@@ -58,8 +58,8 @@ CREATE TABLE project_genre
 	
 	PRIMARY KEY(project_id,genre_id),
 
-	FOREIGN KEY (project_id) REFERENCES projects(project_id) ON DELETE CASCADE,
-    FOREIGN KEY (genre_id) REFERENCES genres(genre_id)
+	FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE,
+    FOREIGN KEY (genre_id) REFERENCES genres(id)
 );
 
 CREATE TABLE project_cast
@@ -70,8 +70,8 @@ CREATE TABLE project_cast
 
 	PRIMARY KEY(project_id, actor_id),
 
-	FOREIGN KEY (project_id) REFERENCES projects(project_id) ON DELETE CASCADE,
-    FOREIGN KEY (actor_id) REFERENCES actors(actor_id)
+	FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE,
+    FOREIGN KEY (actor_id) REFERENCES actors(id)
 );
 
 CREATE TABLE project_on_platform
@@ -81,6 +81,6 @@ CREATE TABLE project_on_platform
 
 	PRIMARY KEY(project_id, platform_id),
 
-	FOREIGN KEY (project_id) REFERENCES projects(project_id) ON DELETE CASCADE,
-    FOREIGN KEY (platform_id) REFERENCES platforms(platform_id)
+	FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE,
+    FOREIGN KEY (platform_id) REFERENCES platforms(id)
 )
