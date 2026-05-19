@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS projects
 (
 	id serial PRIMARY KEY,
 	title varchar(256) UNIQUE NOT NULL,
-	project_type varchar(256) CHECK (type IN('serial','movie')) NOT NULL,
+	project_type varchar(256) CHECK (project_type IN('serial','movie')) NOT NULL,
 	date_of_release date NOT NULL,
 	rating decimal (3,1) CHECK (rating >= 0 and rating <= 10),
 	description text,
