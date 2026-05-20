@@ -14,10 +14,10 @@ def authenticate_user(db,email:str, password:str):
     token = create_access_token({"sub": str(user.id)})
     return token
 
-def register_user(db,email:str, password:str):
+def register_user(db,email, password):
     existing_user = get_user_by_email(db, email)
     if existing_user:
-        return HTTPException(status_code=400, detail="User already exists")
+        raise HTTPException(status_code=400, detail="User already exists")
 
     hashed = hash_password(password)
     user = create_user(db, email, hashed)
