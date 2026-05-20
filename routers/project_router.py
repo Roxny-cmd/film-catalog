@@ -17,8 +17,8 @@ router = APIRouter(prefix="/projects",tags=["Projects"], dependencies=[Depends(g
 
 
 @router.post("/", response_model=ProjectSchema)
-def add_project(data: ProjectCreateSchema,db: Session = Depends(get_db)):
-    return create_project_service(db,data.model_dump())
+def add_project(data: ProjectCreateSchema,db: Session = Depends(get_db), user_id: int = Depends(get_current_user)):
+    return create_project_service(db,data.model_dump(), user_id)
 
 
 @router.get("/", response_model=list[ProjectSchema])

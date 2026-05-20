@@ -11,7 +11,8 @@ from repositories.project_repository import (
 )
 
 
-def create_project_service(db: Session, data: dict):
+def create_project_service(db: Session, data: dict, owner_id: int):
+    data['owner_id'] = owner_id
     return create_project(db, data)
 
 def get_all_projects_service(db: Session):

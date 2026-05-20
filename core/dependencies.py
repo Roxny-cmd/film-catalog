@@ -1,5 +1,4 @@
 from fastapi import Depends, HTTPException
-from fastapi.security import OAuth2PasswordBearer, HTTPAuthorizationCredentials
 from jose import jwt, JWTError
 
 from core.config import SECRET_KEY, ALGORITHM

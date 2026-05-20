@@ -11,7 +11,7 @@ class ProjectCreateSchema(BaseModel):
     date_of_release: date
     rating: Decimal
     description: str | None = None
-    director_id: DirectorShortSchema
+    director_id: int
     studio_id: int | None = None
     country_id: int | None = None
     genres: list[GenreShortSchema] = []
@@ -20,4 +20,5 @@ class ProjectCreateSchema(BaseModel):
 
 class ProjectSchema(ProjectCreateSchema):
     id: int
+    owner_id: int
     model_config = ConfigDict(from_attributes = True)

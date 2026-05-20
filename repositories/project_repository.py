@@ -28,7 +28,7 @@ def update_project_by_id(db:Session, id:int, name:str):
     project = db.get(Project, id)
     if not project:
         return None
-    project.name = name
+    project.title = name
     db.commit()
     db.refresh(project)
     return project

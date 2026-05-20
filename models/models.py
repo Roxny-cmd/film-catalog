@@ -63,6 +63,7 @@ class Project(Base):
     director_id = Column(Integer, ForeignKey('directors.id', ondelete='SET NULL') )
     studio_id = Column(Integer, ForeignKey('studios.id', ondelete='SET NULL') )
     country_id = Column(Integer, ForeignKey('countries.id', ondelete='SET NULL') )
+    owner_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
 
     __table_args__ = (
         CheckConstraint("project_type IN ('film', 'serial')", name='check_film_or_serial'),
