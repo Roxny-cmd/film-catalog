@@ -49,7 +49,7 @@ class Platform(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String(256), unique=True, nullable=False, index=True)
 
-    projects = relationship("ProjectOnPlatform",back_populates="platforms",cascade="all, delete-orphan")
+    projects = relationship("ProjectOnPlatform", back_populates="platform")
 
 class Project(Base):
     __tablename__ = 'projects'
@@ -77,6 +77,9 @@ class Project(Base):
     genres = relationship("Genre", secondary="project_genre",back_populates="projects")
     platforms = relationship("ProjectOnPlatform",back_populates="projects",cascade="all, delete-orphan")
 
+    owner_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    owner = relationship("User", back_populates="projects")
+
 class ProjectCast(Base):
     __tablename__ = 'project_cast'
 
@@ -100,5 +103,5 @@ class ProjectOnPlatform(Base):
     project_id = Column(Integer, ForeignKey("projects.id", ondelete="CASCADE"), primary_key=True)
     platform_id = Column(Integer, ForeignKey("platforms.id", ondelete="CASCADE"), primary_key=True)
 
-    projects = relationship("Project",back_populates="platforms")
-    platforms = relationship("Platform",back_populates="projects")
+    project = relationship("Project", back_populates="platforms")  # было "projects"
+    platform = relationship("Platform", back_populates="projects")
