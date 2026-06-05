@@ -1,7 +1,6 @@
 from sqlalchemy.orm import Session
 from models.models import Project
 
-
 def create_project(db: Session, data: dict):
     project = Project(**data)
     db.add(project)
@@ -15,20 +14,26 @@ def get_all_projects(db: Session):
 def get_project_by_id(db: Session, id: int):
     return db.query(Project).filter(Project.id == id).first()
 
-def get_project_by_name(db: Session, name: str):
-    return db.query(Project).filter(Project.name == name).first()
+def get_project_by_title(db: Session, title: str):  # переименовали функцию и исправили поле
+    return db.query(Project).filter(Project.title == title).first()
 
-def delete_project_by_id(db:Session, id:int):
+def get_projects_by_owner(db: Session, owner_id: int):  # новая — нужна для личного каталога
+    return db.query(Project).filter(Project.owner_id == owner_id).all()
+
+def delete_project_by_id(db: Session, id: int):
     project = db.get(Project, id)
+    if not project:
+        return None
     db.delete(project)
     db.commit()
     return project
 
-def update_project_by_id(db:Session, id:int, name:str):
+def update_project_by_id(db: Session, id: int, data: dict):  # принимает словарь полей
     project = db.get(Project, id)
     if not project:
         return None
-    project.title = name
+    for key, value in data.items():
+        setattr(project, key, value)
     db.commit()
     db.refresh(project)
     return project
