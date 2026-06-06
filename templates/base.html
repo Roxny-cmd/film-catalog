@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Каталог фильмов{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+<nav class="navbar">
+    <a href="/" class="navbar-brand">🎬 FILMCAT</a>
+    <div class="navbar-links">
+        <a href="/" class="nav-link">Каталог</a>
+        {% if request.cookies.get('token') %}
+            <a href="/my" class="nav-link">Мои фильмы</a>
+            <a href="/projects/new" class="nav-link nav-add">+ Добавить</a>
+            <a href="/auth/logout" class="nav-link nav-logout">Выйти</a>
+        {% else %}
+            <a href="/auth/login" class="nav-link">Войти</a>
+            <a href="/auth/register" class="nav-link nav-register">Регистрация</a>
+        {% endif %}
+    </div>
+</nav>
+
+<main class="main-content">
+    {% if error %}
+        <div class="alert alert-error">{{ error }}</div>
+    {% endif %}
+    {% if success %}
+        <div class="alert alert-success">{{ success }}</div>
+    {% endif %}
+
+    {% block content %}{% endblock %}
+</main>
+
+<footer class="footer">
+    <p>© 2025 FilmCat — учебный проект</p>
+</footer>
+
+<script src="/static/js/main.js"></script>
+</body>
+</html>

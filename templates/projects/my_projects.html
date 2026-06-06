@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}Мои фильмы — FilmCat{% endblock %}
+
+{% block content %}
+<section class="catalog-hero">
+    <h1 class="hero-title">Мои <span class="accent">фильмы</span></h1>
+    <p class="hero-sub">{{ projects|length }} в вашем каталоге</p>
+</section>
+
+<div class="my-actions">
+    <a href="/projects/new" class="btn btn-primary">+ Добавить фильм</a>
+</div>
+
+{% if projects %}
+<div class="cards-grid">
+    {% for project in projects %}
+    <a href="/projects/{{ project.id }}" class="card card-owned">
+        <div class="card-badge {% if project.project_type == 'film' %}badge-film{% else %}badge-serial{% endif %}">
+            {{ 'Фильм' if project.project_type == 'film' else 'Сериал' }}
+        </div>
+        <div class="card-body">
+            <h2 class="card-title">{{ project.title }}</h2>
+            <div class="card-meta">
+                <span class="card-year">{{ project.date_of_release.year }}</span>
+                {% if project.director %}
+                    <span class="card-director">{{ project.director.name }}</span>
+                {% endif %}
+            </div>
+            {% if project.genres %}
+            <div class="card-genres">
+                {% for genre in project.genres[:3] %}
+                    <span class="genre-tag">{{ genre.name }}</span>
+                {% endfor %}
+            </div>
+            {% endif %}
+            <div class="card-footer">
+                <span class="card-rating">⭐ {{ project.rating }}</span>
+                <div class="card-actions" onclick="event.preventDefault()">
+                    <a href="/projects/{{ project.id }}/edit" class="btn-icon" title="Редактировать">✏️</a>
+                    <form action="/projects/{{ project.id }}/delete" method="post" style="display:inline">
+                        <button class="btn-icon btn-delete" type="submit"
+                            onclick="return confirm('Удалить «{{ project.title }}»?')"
+                            title="Удалить">🗑️</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </a>
+    {% endfor %}
+</div>
+{% else %}
+<div class="empty-state">
+    <p class="empty-icon">🎬</p>
+    <p class="empty-text">У вас пока нет фильмов. <a href="/projects/new" class="auth-link">Добавить первый!</a></p>
+</div>
+{% endif %}
+{% endblock %}

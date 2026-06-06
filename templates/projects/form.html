@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+{% block title %}{% if project %}Редактировать{% else %}Добавить фильм{% endif %} — FilmCat{% endblock %}
+
+{% block content %}
+<div class="form-wrapper">
+    <h1 class="form-title">
+        {% if project %}Редактировать «{{ project.title }}»{% else %}Новый фильм{% endif %}
+    </h1>
+
+    <form class="project-form" action="{% if project %}/projects/{{ project.id }}/edit{% else %}/projects/new{% endif %}" method="post">
+
+        <!-- Основная информация -->
+        <fieldset class="form-section">
+            <legend class="form-section-title">Основное</legend>
+
+            <div class="form-group">
+                <label class="form-label">Название *</label>
+                <input class="form-input" type="text" name="title"
+                    value="{{ project.title if project else '' }}"
+                    placeholder="Название фильма или сериала" required>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Тип *</label>
+                    <select class="form-input form-select" name="project_type" required>
+                        <option value="film" {% if project and project.project_type == 'film' %}selected{% endif %}>Фильм</option>
+                        <option value="serial" {% if project and project.project_type == 'serial' %}selected{% endif %}>Сериал</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Рейтинг (0–10) *</label>
+                    <input class="form-input" type="number" name="rating" step="0.1" min="0" max="10"
+                        value="{{ project.rating if project else '' }}"
+                        placeholder="7.5" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Дата выхода *</label>
+                    <input class="form-input" type="date" name="date_of_release"
+                        value="{{ project.date_of_release.strftime('%Y-%m-%d') if project else '' }}"
+                        required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Описание</label>
+                <textarea class="form-input form-textarea" name="description"
+                    placeholder="Краткое описание сюжета...">{{ project.description if project else '' }}</textarea>
+            </div>
+        </fieldset>
+
+        <!-- Участники -->
+        <fieldset class="form-section">
+            <legend class="form-section-title">Участники</legend>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Режиссёр</label>
+                    <select class="form-input form-select" name="director_id">
+                        <option value="">— не указан —</option>
+                        {% for director in directors %}
+                        <option value="{{ director.id }}"
+                            {% if project and project.director_id == director.id %}selected{% endif %}>
+                            {{ director.name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Студия</label>
+                    <select class="form-input form-select" name="studio_id">
+                        <option value="">— не указана —</option>
+                        {% for studio in studios %}
+                        <option value="{{ studio.id }}"
+                            {% if project and project.studio_id == studio.id %}selected{% endif %}>
+                            {{ studio.name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Страна</label>
+                    <select class="form-input form-select" name="country_id">
+                        <option value="">— не указана —</option>
+                        {% for country in countries %}
+                        <option value="{{ country.id }}"
+                            {% if project and project.country_id == country.id %}selected{% endif %}>
+                            {{ country.name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </fieldset>
+
+        <!-- Жанры -->
+        <fieldset class="form-section">
+            <legend class="form-section-title">Жанры</legend>
+            <div class="checkbox-grid">
+                {% for genre in genres %}
+                <label class="checkbox-label">
+                    <input type="checkbox" name="genre_ids" value="{{ genre.id }}"
+                        {% if project and genre in project.genres %}checked{% endif %}>
+                    <span class="checkbox-text">{{ genre.name }}</span>
+                </label>
+                {% endfor %}
+            </div>
+        </fieldset>
+
+        <!-- Платформы -->
+        <fieldset class="form-section">
+            <legend class="form-section-title">Где смотреть</legend>
+            <div class="checkbox-grid">
+                {% for platform in platforms %}
+                <label class="checkbox-label">
+                    <input type="checkbox" name="platform_ids" value="{{ platform.id }}"
+                        {% if project and platform in project.project_platforms|map(attribute='platform')|list %}checked{% endif %}>
+                    <span class="checkbox-text">{{ platform.name }}</span>
+                </label>
+                {% endfor %}
+            </div>
+        </fieldset>
+
+        <div class="form-actions">
+            <a href="{% if project %}/projects/{{ project.id }}{% else %}/{% endif %}" class="btn btn-ghost">Отмена</a>
+            <button class="btn btn-primary" type="submit">
+                {% if project %}Сохранить изменения{% else %}Добавить фильм{% endif %}
+            </button>
+        </div>
+
+    </form>
+</div>
+{% endblock %}

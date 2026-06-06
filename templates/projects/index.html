@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %}Каталог фильмов — FilmCat{% endblock %}
+
+{% block content %}
+<section class="catalog-hero">
+    <h1 class="hero-title">Каталог <span class="accent">фильмов</span></h1>
+    <p class="hero-sub">{{ projects|length }} записей в базе</p>
+</section>
+
+<!-- Поиск -->
+<div class="search-bar">
+    <form action="/" method="get">
+        <input
+            class="search-input"
+            type="text"
+            name="search"
+            placeholder="Поиск по названию..."
+            value="{{ search or '' }}"
+        >
+        <button class="btn btn-search" type="submit">🔍</button>
+    </form>
+</div>
+
+<!-- Сетка карточек -->
+{% if projects %}
+<div class="cards-grid">
+    {% for project in projects %}
+    <a href="/projects/{{ project.id }}" class="card">
+        <div class="card-badge {% if project.project_type == 'film' %}badge-film{% else %}badge-serial{% endif %}">
+            {{ 'Фильм' if project.project_type == 'film' else 'Сериал' }}
+        </div>
+        <div class="card-body">
+            <h2 class="card-title">{{ project.title }}</h2>
+            <div class="card-meta">
+                <span class="card-year">{{ project.date_of_release.year }}</span>
+                {% if project.director %}
+                    <span class="card-director">{{ project.director.name }}</span>
+                {% endif %}
+            </div>
+            {% if project.genres %}
+            <div class="card-genres">
+                {% for genre in project.genres[:3] %}
+                    <span class="genre-tag">{{ genre.name }}</span>
+                {% endfor %}
+            </div>
+            {% endif %}
+            <div class="card-footer">
+                <span class="card-rating">⭐ {{ project.rating }}</span>
+                {% if project.country %}
+                    <span class="card-country">{{ project.country.name }}</span>
+                {% endif %}
+            </div>
+        </div>
+    </a>
+    {% endfor %}
+</div>
+{% else %}
+<div class="empty-state">
+    <p class="empty-icon">🎬</p>
+    <p class="empty-text">
+        {% if search %}
+            По запросу «{{ search }}» ничего не найдено
+        {% else %}
+            Каталог пуст. <a href="/projects/new" class="auth-link">Добавьте первый фильм!</a>
+        {% endif %}
+    </p>
+</div>
+{% endif %}
+{% endblock %}

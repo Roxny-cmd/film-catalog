@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Регистрация — FilmCat{% endblock %}
+
+{% block content %}
+<div class="auth-wrapper">
+    <div class="auth-card">
+        <div class="auth-header">
+            <h1 class="auth-title">Создать аккаунт</h1>
+            <p class="auth-subtitle">Начни вести свой каталог</p>
+        </div>
+
+        <form class="auth-form" action="/auth/register" method="post">
+            <div class="form-group">
+                <label class="form-label">Имя пользователя</label>
+                <input
+                    class="form-input"
+                    type="text"
+                    name="username"
+                    placeholder="cinephile42"
+                    required
+                    minlength="3"
+                    autocomplete="username"
+                >
+            </div>
+            <div class="form-group">
+                <label class="form-label">Email</label>
+                <input
+                    class="form-input"
+                    type="email"
+                    name="email"
+                    placeholder="your@email.com"
+                    required
+                    autocomplete="email"
+                >
+            </div>
+            <div class="form-group">
+                <label class="form-label">Пароль</label>
+                <input
+                    class="form-input"
+                    type="password"
+                    name="password"
+                    placeholder="Минимум 8 символов"
+                    required
+                    minlength="8"
+                    autocomplete="new-password"
+                >
+            </div>
+            <button class="btn btn-primary btn-full" type="submit">Зарегистрироваться</button>
+        </form>
+
+        <p class="auth-switch">
+            Уже есть аккаунт? <a href="/auth/login" class="auth-link">Войти</a>
+        </p>
+    </div>
+</div>
+{% endblock %}
