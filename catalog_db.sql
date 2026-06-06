@@ -30,15 +30,15 @@ CREATE TABLE IF NOT EXISTS platforms (
 
 CREATE TABLE IF NOT EXISTS users (
     id SERIAL PRIMARY KEY,
-    username VARCHAR(128) UNIQUE NOT NULL,      -- добавили
+    username VARCHAR(128) UNIQUE NOT NULL,
     email VARCHAR(256) UNIQUE NOT NULL,
     hashed_password TEXT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS projects (
     id SERIAL PRIMARY KEY,
-    title VARCHAR(256) NOT NULL,                -- убрали UNIQUE (ремейки существуют)
-    project_type VARCHAR(256) CHECK (project_type IN ('film', 'serial')) NOT NULL,  -- 'film' вместо 'movie'
+    title VARCHAR(256) NOT NULL,
+    project_type VARCHAR(256) CHECK (project_type IN ('film', 'serial')) NOT NULL,
     date_of_release DATE NOT NULL,
     rating DECIMAL(3,1) CHECK (rating >= 0 AND rating <= 10),
     description TEXT,
@@ -58,7 +58,7 @@ CREATE TABLE IF NOT EXISTS project_genre (
     genre_id INT,
     PRIMARY KEY (project_id, genre_id),
     FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE,
-    FOREIGN KEY (genre_id) REFERENCES genres(id) ON DELETE CASCADE   -- добавили
+    FOREIGN KEY (genre_id) REFERENCES genres(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS project_cast (
@@ -67,7 +67,7 @@ CREATE TABLE IF NOT EXISTS project_cast (
     role VARCHAR(256) NOT NULL,
     PRIMARY KEY (project_id, actor_id),
     FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE,
-    FOREIGN KEY (actor_id) REFERENCES actors(id) ON DELETE CASCADE   -- добавили
+    FOREIGN KEY (actor_id) REFERENCES actors(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS project_on_platform (
@@ -75,5 +75,5 @@ CREATE TABLE IF NOT EXISTS project_on_platform (
     platform_id INT,
     PRIMARY KEY (project_id, platform_id),
     FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE,
-    FOREIGN KEY (platform_id) REFERENCES platforms(id) ON DELETE CASCADE  -- добавили
+    FOREIGN KEY (platform_id) REFERENCES platforms(id) ON DELETE CASCADE
 );
