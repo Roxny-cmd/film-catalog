@@ -1,10 +1,5 @@
-from pydantic import BaseModel
-
-class ActorShortSchema(BaseModel):
-    id: int
-    name: str
-    class Config:
-        from_attributes = True
+from pydantic import BaseModel, ConfigDict
+from schemas.actor import ActorSchema            # импорт вместо дубля
 
 class ProjectCastCreateSchema(BaseModel):
     actor_id: int
@@ -12,7 +7,6 @@ class ProjectCastCreateSchema(BaseModel):
 
 class ProjectCastSchema(BaseModel):
     project_id: int
-    actor: ActorShortSchema
+    actor: ActorSchema                           # используем общую схему
     role: str
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)

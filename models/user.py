@@ -2,6 +2,7 @@ from sqlalchemy import Column, Integer, String
 from database.connection import Base
 from sqlalchemy.orm import relationship
 
+
 class User(Base):
     __tablename__ = "users"
 
@@ -9,5 +10,6 @@ class User(Base):
     username = Column(String(128), unique=True, index=True, nullable=False)
     email = Column(String(256), unique=True, index=True, nullable=False)
     hashed_password = Column(String, nullable=False)
+
 
     projects = relationship("Project", back_populates="owner")
