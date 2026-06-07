@@ -14,7 +14,7 @@
 {% if projects %}
 <div class="cards-grid">
     {% for project in projects %}
-    <a href="/projects/{{ project.id }}" class="card card-owned">
+    <a href="/projects/{{ project.id }}" class="card">
         <div class="card-badge {% if project.project_type == 'film' %}badge-film{% else %}badge-serial{% endif %}">
             {{ 'Фильм' if project.project_type == 'film' else 'Сериал' }}
         </div>
@@ -35,14 +35,9 @@
             {% endif %}
             <div class="card-footer">
                 <span class="card-rating">⭐ {{ project.rating }}</span>
-                <div class="card-actions" onclick="event.preventDefault()">
-                    <a href="/projects/{{ project.id }}/edit" class="btn-icon" title="Редактировать">✏️</a>
-                    <form action="/projects/{{ project.id }}/delete" method="post" style="display:inline">
-                        <button class="btn-icon btn-delete" type="submit"
-                            onclick="return confirm('Удалить «{{ project.title }}»?')"
-                            title="Удалить">🗑️</button>
-                    </form>
-                </div>
+                {% if project.country %}
+                    <span class="card-country">{{ project.country.name }}</span>
+                {% endif %}
             </div>
         </div>
     </a>
@@ -51,7 +46,10 @@
 {% else %}
 <div class="empty-state">
     <p class="empty-icon">🎬</p>
-    <p class="empty-text">У вас пока нет фильмов. <a href="/projects/new" class="auth-link">Добавить первый!</a></p>
+    <p class="empty-text">
+        У вас пока нет фильмов.
+        <a href="/projects/new" class="auth-link">Добавить первый!</a>
+    </p>
 </div>
 {% endif %}
 {% endblock %}

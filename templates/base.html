@@ -16,6 +16,19 @@
         <a href="/" class="nav-link">Каталог</a>
         {% if request.cookies.get('token') %}
             <a href="/my" class="nav-link">Мои фильмы</a>
+            <div class="nav-dropdown">
+                <button class="nav-link nav-dropdown-trigger" id="dir-trigger" type="button">
+                    Справочники ▾
+                </button>
+                <div class="nav-dropdown-menu" id="dir-menu">
+                    <a href="/directory/genres">🎭 Жанры</a>
+                    <a href="/directory/directors">🎬 Режиссёры</a>
+                    <a href="/directory/actors">⭐ Актёры</a>
+                    <a href="/directory/studios">🏢 Студии</a>
+                    <a href="/directory/countries">🌍 Страны</a>
+                    <a href="/directory/platforms">📺 Платформы</a>
+                </div>
+            </div>
             <a href="/projects/new" class="nav-link nav-add">+ Добавить</a>
             <a href="/auth/logout" class="nav-link nav-logout">Выйти</a>
         {% else %}
@@ -32,7 +45,6 @@
     {% if success %}
         <div class="alert alert-success">{{ success }}</div>
     {% endif %}
-
     {% block content %}{% endblock %}
 </main>
 

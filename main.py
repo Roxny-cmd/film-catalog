@@ -12,12 +12,14 @@ from routers.project_cast_router import router as project_cast_router
 from routers.genre_router import router as genre_router
 from routers.platform_router import router as platform_router
 from routers.project_genre_router import router as project_genre_router
-from routers.project_platform_router import router as project_platform_router  # имя файла исправлено
+from routers.project_platform_router import router as project_platform_router
 from routers.auth_router import router as auth_api_router
 
-# Роутеры страниц (Jinja2)
+# Страницы (Jinja2)
 from routers.pages_auth_router import router as pages_auth_router
 from routers.pages_project_router import router as pages_project_router
+from routers.pages_directory_router import router as pages_directory_router
+from routers.pages_cast_router import router as pages_cast_router
 
 app = FastAPI(
     title="Film Catalog",
@@ -25,10 +27,8 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# Статические файлы
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
-# CORS
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -37,11 +37,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# ── Страницы (Jinja2) — регистрируем ПЕРВЫМИ ──
+# ── Страницы (Jinja2) — первыми ──
 app.include_router(pages_auth_router)
+app.include_router(pages_directory_router)
+app.include_router(pages_cast_router)
 app.include_router(pages_project_router)
 
-# ── API роутеры (под /api префиксом чтобы не конфликтовать) ──
+# ── API под /api префиксом ──
 app.include_router(auth_api_router, prefix="/api")
 app.include_router(director_router, prefix="/api")
 app.include_router(studio_router, prefix="/api")

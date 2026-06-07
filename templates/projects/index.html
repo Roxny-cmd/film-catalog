@@ -1,27 +1,129 @@
 {% extends "base.html" %}
-{% block title %}Каталог фильмов — FilmCat{% endblock %}
+{% block title %}Каталог — FilmCat{% endblock %}
 
 {% block content %}
 <section class="catalog-hero">
     <h1 class="hero-title">Каталог <span class="accent">фильмов</span></h1>
-    <p class="hero-sub">{{ projects|length }} записей в базе</p>
+    <p class="hero-sub">
+        Всего: {{ total }}
+        {% if projects|length != total %} · найдено: {{ projects|length }}{% endif %}
+    </p>
 </section>
 
-<!-- Поиск -->
-<div class="search-bar">
-    <form action="/" method="get">
-        <input
-            class="search-input"
-            type="text"
-            name="search"
-            placeholder="Поиск по названию..."
-            value="{{ search or '' }}"
-        >
-        <button class="btn btn-search" type="submit">🔍</button>
-    </form>
-</div>
+<form class="filters-form" action="/" method="get">
 
-<!-- Сетка карточек -->
+    <!-- Поиск + табы типа -->
+    <div class="filter-search-row">
+        <div style="display:flex; flex:1">
+            <input class="search-input" type="text" name="search"
+                placeholder="Поиск по названию..."
+                value="{{ filters.search or '' }}">
+            <button class="btn-search" type="submit">🔍</button>
+        </div>
+
+        <div class="filter-type-tabs">
+            <button type="submit" name="project_type" value=""
+                class="tab-btn {% if not filters.project_type %}tab-active{% endif %}">
+                Все
+            </button>
+            <button type="submit" name="project_type" value="film"
+                class="tab-btn {% if filters.project_type == 'film' %}tab-active{% endif %}">
+                🎬 Фильмы
+            </button>
+            <button type="submit" name="project_type" value="serial"
+                class="tab-btn {% if filters.project_type == 'serial' %}tab-active{% endif %}">
+                📺 Сериалы
+            </button>
+        </div>
+
+        {% if filters.search or filters.project_type or filters.genre_id
+              or filters.country_id or filters.director_id or filters.actor_id
+              or filters.year_from or filters.year_to %}
+        <a href="/" class="btn btn-ghost filter-reset">✕ Сбросить</a>
+        {% endif %}
+    </div>
+
+    <!-- Скрытые поля — сохраняют остальные фильтры при нажатии на табы -->
+    <input type="hidden" name="search"      value="{{ filters.search or '' }}">
+    <input type="hidden" name="genre_id"    value="{{ filters.genre_id or '' }}">
+    <input type="hidden" name="country_id"  value="{{ filters.country_id or '' }}">
+    <input type="hidden" name="director_id" value="{{ filters.director_id or '' }}">
+    <input type="hidden" name="actor_id"    value="{{ filters.actor_id or '' }}">
+    <input type="hidden" name="year_from"   value="{{ filters.year_from or '' }}">
+    <input type="hidden" name="year_to"     value="{{ filters.year_to or '' }}">
+
+    <!-- Расширенные фильтры -->
+    <div class="filters-grid">
+        <div class="filter-group">
+            <label class="filter-label">Жанр</label>
+            <select class="filter-select" name="genre_id" onchange="this.form.submit()">
+                <option value="">Все жанры</option>
+                {% for g in all_genres %}
+                <option value="{{ g.id }}"
+                    {% if filters.genre_id == g.id|string %}selected{% endif %}>
+                    {{ g.name }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label class="filter-label">Страна</label>
+            <select class="filter-select" name="country_id" onchange="this.form.submit()">
+                <option value="">Все страны</option>
+                {% for c in all_countries %}
+                <option value="{{ c.id }}"
+                    {% if filters.country_id == c.id|string %}selected{% endif %}>
+                    {{ c.name }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label class="filter-label">Режиссёр</label>
+            <select class="filter-select" name="director_id" onchange="this.form.submit()">
+                <option value="">Все режиссёры</option>
+                {% for d in all_directors %}
+                <option value="{{ d.id }}"
+                    {% if filters.director_id == d.id|string %}selected{% endif %}>
+                    {{ d.name }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label class="filter-label">Актёр</label>
+            <select class="filter-select" name="actor_id" onchange="this.form.submit()">
+                <option value="">Все актёры</option>
+                {% for a in all_actors %}
+                <option value="{{ a.id }}"
+                    {% if filters.actor_id == a.id|string %}selected{% endif %}>
+                    {{ a.name }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label class="filter-label">Год от</label>
+            <input class="filter-select" type="number" name="year_from"
+                min="1888" max="2099" placeholder="1990"
+                value="{{ filters.year_from or '' }}"
+                onchange="this.form.submit()">
+        </div>
+
+        <div class="filter-group">
+            <label class="filter-label">Год до</label>
+            <input class="filter-select" type="number" name="year_to"
+                min="1888" max="2099" placeholder="2025"
+                value="{{ filters.year_to or '' }}"
+                onchange="this.form.submit()">
+        </div>
+    </div>
+</form>
+
 {% if projects %}
 <div class="cards-grid">
     {% for project in projects %}
@@ -58,11 +160,8 @@
 <div class="empty-state">
     <p class="empty-icon">🎬</p>
     <p class="empty-text">
-        {% if search %}
-            По запросу «{{ search }}» ничего не найдено
-        {% else %}
-            Каталог пуст. <a href="/projects/new" class="auth-link">Добавьте первый фильм!</a>
-        {% endif %}
+        Ничего не найдено —
+        <a href="/" class="auth-link">сбросить фильтры</a>
     </p>
 </div>
 {% endif %}
