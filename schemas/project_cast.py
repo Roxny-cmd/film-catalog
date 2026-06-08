@@ -7,6 +7,6 @@ class ProjectCastCreateSchema(BaseModel):
 
 class ProjectCastSchema(BaseModel):
     project_id: int
-    actor: ActorSchema                           # используем общую схему
+    actor: ActorSchema
     role: str
     model_config = ConfigDict(from_attributes=True)

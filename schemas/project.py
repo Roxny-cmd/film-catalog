@@ -9,15 +9,15 @@ from schemas.platform import PlatformSchema
 
 class ProjectCreateSchema(BaseModel):
     title: str
-    project_type: Literal['film', 'serial']      # валидация типа
+    project_type: Literal['film', 'serial']
     date_of_release: date
     rating: Decimal
     description: str | None = None
-    director_id: int | None = None               # опциональный
+    director_id: int | None = None
     studio_id: int | None = None
     country_id: int | None = None
-    genre_ids: list[int] = []                    # список id, не объектов
-    platform_ids: list[int] = []                 # добавили платформы
+    genre_ids: list[int] = []
+    platform_ids: list[int] = []
 
     @field_validator("rating")
     def validate_rating(cls, v):
@@ -28,7 +28,7 @@ class ProjectCreateSchema(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
 
-class ProjectUpdateSchema(BaseModel):            # новый — для PATCH/PUT
+class ProjectUpdateSchema(BaseModel):
     title: str | None = None
     project_type: Literal['film', 'serial'] | None = None
     date_of_release: date | None = None
@@ -41,7 +41,7 @@ class ProjectUpdateSchema(BaseModel):            # новый — для PATCH/P
     model_config = ConfigDict(from_attributes=True)
 
 
-class ProjectSchema(BaseModel):                  # полная карточка для ответа
+class ProjectSchema(BaseModel):
     id: int
     title: str
     project_type: str

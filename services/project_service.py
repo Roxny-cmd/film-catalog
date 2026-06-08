@@ -17,19 +17,16 @@ from repositories.platform_repository import get_platform_by_id
 
 
 def create_project_service(db: Session, data: dict, owner_id: int):
-    # Вытаскиваем id жанров и платформ — это не колонки таблицы projects
     genre_ids = data.pop("genre_ids", [])
     platform_ids = data.pop("platform_ids", [])
 
     data["owner_id"] = owner_id
     project = create_project(db, data)
 
-    # Добавляем жанры
     for genre_id in genre_ids:
         if get_genre_by_id(db, genre_id):
             create_project_genre(db, project.id, genre_id)
 
-    # Добавляем платформы
     for platform_id in platform_ids:
         if get_platform_by_id(db, platform_id):
             create_project_platform(db, project.id, platform_id)

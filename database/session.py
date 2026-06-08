@@ -5,7 +5,7 @@ def get_db():
     try:
         yield db
     except Exception:
-        db.rollback()  # откатываем транзакцию если что-то пошло не так
+        db.rollback()
         raise
     finally:
         db.close()

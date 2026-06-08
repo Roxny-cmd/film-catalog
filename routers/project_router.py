@@ -9,8 +9,8 @@ from services.project_service import (
     create_project_service,
     get_all_projects_service,
     get_project_by_id_service,
-    get_project_by_title_service,   # переименованный
-    get_my_projects_service,        # новый
+    get_project_by_title_service,
+    get_my_projects_service,
     update_project_service,
     delete_project_service
 )
@@ -26,19 +26,19 @@ def add_project(
     return create_project_service(db, data.model_dump(), current_user.id)
 
 @router.get("/", response_model=list[ProjectSchema])
-def get_projects(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+def get_projects(db: Session = Depends(get_db)):
     return get_all_projects_service(db)
 
-@router.get("/my", response_model=list[ProjectSchema])   # новый — личный каталог
+@router.get("/my", response_model=list[ProjectSchema])
 def get_my_projects(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     return get_my_projects_service(db, current_user.id)
 
 @router.get("/search", response_model=ProjectSchema)
-def search_project(title: str, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+def search_project(title: str, db: Session = Depends(get_db)):
     return get_project_by_title_service(db, title)
 
 @router.get("/{id}", response_model=ProjectSchema)
-def get_project_by_id(id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+def get_project_by_id(id: int, db: Session = Depends(get_db)):
     return get_project_by_id_service(db, id)
 
 @router.delete("/{id}", response_model=ProjectSchema)
@@ -47,12 +47,12 @@ def delete_project(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    return delete_project_service(db, id, current_user.id)  # передаём owner_id
+    return delete_project_service(db, id, current_user.id)
 
 @router.put("/{id}", response_model=ProjectSchema)
 def update_project(
     id: int,
-    data: ProjectUpdateSchema,                              # используем UpdateSchema
+    data: ProjectUpdateSchema,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):

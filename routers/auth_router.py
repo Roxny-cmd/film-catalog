@@ -11,11 +11,10 @@ router = APIRouter(prefix="/auth", tags=["Auth"])
 
 @router.post("/login", response_model=TokenSchema)
 def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
-    # form_data.username содержит email — так работает стандартная OAuth2 форма
     token = authenticate_user(db, form_data.username, form_data.password)
     return {"access_token": token, "token_type": "bearer"}
 
 @router.post("/register", response_model=TokenSchema)
 def register(data: RegisterSchema, db: Session = Depends(get_db)):
-    token = register_user(db, data.username, data.email, data.password)  # добавили username
+    token = register_user(db, data.username, data.email, data.password)
     return {"access_token": token, "token_type": "bearer"}
