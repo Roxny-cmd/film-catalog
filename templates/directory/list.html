@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% block title %}{{ title }} — FilmCat{% endblock %}
+
+{% block content %}
+<div class="catalog-hero">
+    <h1 class="hero-title"><span class="accent">{{ title }}</span></h1>
+    <p class="hero-sub">{{ items|length }} записей в общем списке</p>
+</div>
+
+<div class="directory-layout">
+
+    <!-- Боковая панель: форма добавления -->
+    <div class="directory-sidebar">
+        <div class="dir-card">
+            <h2 class="dir-card-title">Добавить в общий список</h2>
+            <p class="dir-card-hint">Добавленное будет доступно всем пользователям при создании карточек фильмов</p>
+
+            <form action="{{ add_url }}" method="post" class="dir-form">
+                <div class="form-group">
+                    <input class="form-input {% if error %}input-error{% endif %}"
+                        type="text" name="name"
+                        placeholder="{{ placeholder }}"
+                        required minlength="2"
+                        autocomplete="off">
+                </div>
+
+                {% if error %}
+                <div class="dir-inline-error">⚠️ {{ error }}</div>
+                {% endif %}
+
+                {% if success %}
+                <div class="dir-inline-success">✓ {{ success }}</div>
+                {% endif %}
+
+                <button class="btn btn-primary btn-full" type="submit">Добавить</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Список записей -->
+    <div class="directory-list">
+        {% if items %}
+            {% for item in items %}
+            <div class="dir-item" id="item-{{ item.id }}">
+
+                <!-- Просмотр -->
+                <div class="dir-view">
+                    <span class="dir-name">{{ item.name }}</span>
+                    <div class="dir-actions">
+                        <button class="btn-icon"
+                            onclick="startEdit({{ item.id }}, '{{ item.name|e }}')"
+                            title="Редактировать">✏️</button>
+                        <form action="{{ delete_url }}/{{ item.id }}" method="post" style="display:inline">
+                            <button class="btn-icon btn-delete" type="submit"
+                                onclick="return confirm('Удалить «{{ item.name|e }}»?\nЭто также удалит связь с фильмами.')"
+                                title="Удалить">🗑️</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Редактирование -->
+                <form class="dir-edit hidden"
+                    action="{{ edit_url }}/{{ item.id }}" method="post">
+                    <input class="form-input dir-edit-input"
+                        type="text" name="name"
+                        value="{{ item.name }}" required minlength="2">
+                    <div class="dir-edit-actions">
+                        <button class="btn btn-primary" type="submit"
+                            style="padding:0.4rem 1rem;">Сохранить</button>
+                        <button class="btn btn-ghost" type="button"
+                            onclick="cancelEdit({{ item.id }})"
+                            style="padding:0.4rem 0.8rem;">Отмена</button>
+                    </div>
+                </form>
+
+            </div>
+            {% endfor %}
+        {% else %}
+        <div class="empty-state">
+            <p class="empty-icon">📭</p>
+            <p class="empty-text">Список пуст — добавьте первую запись</p>
+        </div>
+        {% endif %}
+    </div>
+
+</div>
+{% endblock %}

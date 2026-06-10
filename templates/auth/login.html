@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Вход — FilmCat{% endblock %}
+
+{% block content %}
+<div class="auth-wrapper">
+    <div class="auth-card">
+        <div class="auth-header">
+            <h1 class="auth-title">Добро пожаловать</h1>
+            <p class="auth-subtitle">Войдите в свой аккаунт</p>
+        </div>
+
+        <form class="auth-form" action="/auth/login" method="post">
+            <div class="form-group">
+                <label class="form-label">Email</label>
+                <input
+                    class="form-input"
+                    type="email"
+                    name="username"
+                    placeholder="your@email.com"
+                    required
+                    autocomplete="email"
+                >
+            </div>
+            <div class="form-group">
+                <label class="form-label">Пароль</label>
+                <input
+                    class="form-input"
+                    type="password"
+                    name="password"
+                    placeholder="••••••••"
+                    required
+                    autocomplete="current-password"
+                >
+            </div>
+            <button class="btn btn-primary btn-full" type="submit">Войти</button>
+        </form>
+
+        <p class="auth-switch">
+            Нет аккаунта? <a href="/auth/register" class="auth-link">Зарегистрироваться</a>
+        </p>
+    </div>
+</div>
+{% endblock %}

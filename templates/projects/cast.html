@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% block title %}Состав — {{ project.title }} — FilmCat{% endblock %}
+
+{% block content %}
+<div class="detail-back" style="margin-bottom:1.5rem">
+    <a href="/projects/{{ project.id }}" class="btn btn-ghost">← {{ project.title }}</a>
+</div>
+
+<div class="catalog-hero">
+    <h1 class="hero-title">Состав <span class="accent">«{{ project.title }}»</span></h1>
+    <p class="hero-sub">{{ casts|length }} актёров добавлено</p>
+</div>
+
+<div class="directory-layout">
+
+    <!-- Форма добавления актёра -->
+    <div class="directory-sidebar">
+        <div class="dir-card">
+            <h2 class="dir-card-title">Добавить актёра</h2>
+
+            {% if all_actors|selectattr('id', 'in', cast_actor_ids)|list|length == all_actors|length and all_actors %}
+                <p class="dir-card-hint" style="color:var(--text-muted)">Все доступные актёры уже добавлены в состав</p>
+            {% else %}
+            <form action="/projects/{{ project.id }}/cast/add" method="post" class="dir-form">
+                <div class="form-group">
+                    <label class="form-label">Актёр</label>
+                    <select class="form-input form-select" name="actor_id" required>
+                        <option value="">— выберите актёра —</option>
+                        {% for actor in all_actors %}
+                            {% if actor.id not in cast_actor_ids %}
+                            <option value="{{ actor.id }}">{{ actor.name }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Роль в фильме</label>
+                    <input class="form-input {% if cast_error %}input-error{% endif %}"
+                        type="text" name="role"
+                        placeholder="Например: Главный герой"
+                        required minlength="2">
+                </div>
+
+                {% if cast_error %}
+                <div class="dir-inline-error">⚠️ {{ cast_error }}</div>
+                {% endif %}
+
+                <button class="btn btn-primary btn-full" type="submit">Добавить в состав</button>
+            </form>
+            {% endif %}
+
+            <div class="dir-card-divider"></div>
+            <p class="form-label" style="margin-bottom:0.5rem">Нет нужного актёра?</p>
+            <a href="/directory/actors" class="btn btn-ghost btn-full">
+                + Добавить актёра в общий список
+            </a>
+        </div>
+    </div>
+
+    <!-- Текущий состав -->
+    <div class="directory-list">
+        {% if casts %}
+            {% for cast in casts %}
+            <div class="dir-item cast-item-row" id="cast-{{ cast.actor_id }}">
+
+                <!-- Просмотр -->
+                <div class="dir-view">
+                    <div class="cast-info">
+                        <span class="dir-name">{{ cast.actor.name }}</span>
+                        <span class="cast-role-badge">{{ cast.role }}</span>
+                    </div>
+                    <div class="dir-actions">
+                        <button class="btn-icon"
+                            onclick="startCastEdit({{ cast.actor_id }}, '{{ cast.role|e }}')"
+                            title="Изменить роль">✏️</button>
+                        <form action="/projects/{{ project.id }}/cast/{{ cast.actor_id }}/delete"
+                            method="post" style="display:inline">
+                            <button class="btn-icon btn-delete" type="submit"
+                                onclick="return confirm('Убрать {{ cast.actor.name|e }} из состава?')"
+                                title="Убрать из состава">🗑️</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Редактирование роли -->
+                <form class="dir-edit hidden"
+                    action="/projects/{{ project.id }}/cast/{{ cast.actor_id }}/edit"
+                    method="post">
+                    <div class="cast-edit-row">
+                        <span class="dir-name" style="flex-shrink:0;min-width:120px">
+                            {{ cast.actor.name }}
+                        </span>
+                        <input class="form-input dir-edit-input"
+                            type="text" name="role"
+                            value="{{ cast.role }}"
+                            placeholder="Роль" required minlength="2">
+                    </div>
+                    <div class="dir-edit-actions">
+                        <button class="btn btn-primary" type="submit"
+                            style="padding:0.4rem 1rem;">Сохранить</button>
+                        <button class="btn btn-ghost" type="button"
+                            onclick="cancelCastEdit({{ cast.actor_id }})"
+                            style="padding:0.4rem 0.8rem;">Отмена</button>
+                    </div>
+                </form>
+
+            </div>
+            {% endfor %}
+        {% else %}
+        <div class="empty-state">
+            <p class="empty-icon">🎭</p>
+            <p class="empty-text">Состав пока не добавлен</p>
+        </div>
+        {% endif %}
+    </div>
+
+</div>
+{% endblock %}

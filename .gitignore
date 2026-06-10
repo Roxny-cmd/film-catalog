@@ -1,0 +1,61 @@
+# ===== Секреты и окружение =====
+.env
+.env.*
+!.env.example
+
+# ===== Python =====
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# ===== Виртуальные окружения =====
+venv/
+env/
+.venv/
+.env/
+ENV/
+
+# ===== PyCharm / JetBrains IDE =====
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# ===== VS Code =====
+.vscode/
+*.code-workspace
+
+# ===== Тесты и покрытие =====
+.pytest_cache/
+.coverage
+htmlcov/
+coverage.xml
+
+# ===== Дистрибуция и сборка =====
+dist/
+build/
+*.egg-info/
+*.egg
+
+# ===== Логи =====
+*.log
+logs/
+
+# ===== База данных =====
+*.sqlite
+*.sqlite3
+*.db
+
+# ===== Docker =====
+.dockerignore
+
+# ===== macOS =====
+.DS_Store
+
+# ===== Windows =====
+Thumbs.db
+desktop.ini

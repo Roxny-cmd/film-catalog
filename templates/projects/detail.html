@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% block title %}{{ project.title }} — FilmCat{% endblock %}
+
+{% block content %}
+<div class="detail-wrapper">
+
+    <!-- Шапка карточки -->
+    <div class="detail-header">
+        <div class="detail-badge {% if project.project_type == 'film' %}badge-film{% else %}badge-serial{% endif %}">
+            {{ 'Фильм' if project.project_type == 'film' else 'Сериал' }}
+        </div>
+        <h1 class="detail-title">{{ project.title }}</h1>
+        <div class="detail-meta-row">
+            <span class="detail-rating">⭐ {{ project.rating }}<span class="rating-max">/10</span></span>
+            <span class="detail-year">{{ project.date_of_release.strftime('%Y') }}</span>
+            <span class="detail-date">{{ project.date_of_release.strftime('%d.%m.%Y') }}</span>
+        </div>
+
+        {% if is_owner %}
+        <div class="detail-owner-actions">
+            <a href="/projects/{{ project.id }}/edit" class="btn btn-secondary">✏️ Редактировать</a>
+            <form action="/projects/{{ project.id }}/delete" method="post" style="display:inline">
+                <button class="btn btn-danger" type="submit"
+                    onclick="return confirm('Удалить «{{ project.title }}»?')">
+                    🗑️ Удалить
+                </button>
+            </form>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="detail-body">
+
+        <!-- Левая колонка — инфо -->
+        <div class="detail-info">
+
+            {% if project.description %}
+            <div class="detail-section">
+                <h2 class="section-title">Описание</h2>
+                <p class="detail-description">{{ project.description }}</p>
+            </div>
+            {% endif %}
+
+            <div class="detail-section">
+                <h2 class="section-title">Информация</h2>
+                <dl class="info-list">
+                    {% if project.director %}
+                    <div class="info-row">
+                        <dt>Режиссёр</dt>
+                        <dd>{{ project.director.name }}</dd>
+                    </div>
+                    {% endif %}
+                    {% if project.studio %}
+                    <div class="info-row">
+                        <dt>Студия</dt>
+                        <dd>{{ project.studio.name }}</dd>
+                    </div>
+                    {% endif %}
+                    {% if project.country %}
+                    <div class="info-row">
+                        <dt>Страна</dt>
+                        <dd>{{ project.country.name }}</dd>
+                    </div>
+                    {% endif %}
+                </dl>
+            </div>
+
+            {% if project.genres %}
+            <div class="detail-section">
+                <h2 class="section-title">Жанры</h2>
+                <div class="genres-list">
+                    {% for genre in project.genres %}
+                        <span class="genre-tag genre-tag-lg">{{ genre.name }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            {% if project.project_platforms %}
+            <div class="detail-section">
+                <h2 class="section-title">Где смотреть</h2>
+                <div class="platforms-list">
+                    {% for pp in project.project_platforms %}
+                        <span class="platform-tag">{{ pp.platform.name }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+        </div>
+
+        <!-- Правая колонка — актёры -->
+        {% if project.casts %}
+        <div class="detail-cast">
+            <h2 class="section-title">В ролях</h2>
+            <ul class="cast-list">
+                {% for cast in project.casts %}
+                <li class="cast-item">
+                    <span class="cast-name">{{ cast.actor.name }}</span>
+                    <span class="cast-role">{{ cast.role }}</span>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
+    </div>
+</div>
+
+<div class="detail-back">
+    <a href="/" class="btn btn-ghost">← Назад к каталогу</a>
+</div>
+{% endblock %}
